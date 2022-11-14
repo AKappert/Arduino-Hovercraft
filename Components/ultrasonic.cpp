@@ -23,30 +23,14 @@ static volatile struct {
 int int0_trigged = 0;
 int counter = 0;
 
-//Function used to initialize pins as input or output and set high or low
-void gpio_init() {
-  cli(); //Stop Interrupts
-  DDRD = (0<<ECHO_PIN); //ECHO_PIN as input
-  DDRB = ((1<<LED_PIN) | (1<<TRIG_PIN)); // LED_PIN and TRIG_PIN as output
-  sei(); //Allow Interrupts
-} //end gpio_init
-
-void uart_init() { // TX and RX init with IRQ
-  UBRR0H = (uint8_t)((UBRR)>>8); // Set the UART speed as defined by UBRR
-  UBRR0L = (uint8_t)UBRR;
-  UCSR0B|=(1<<TXCIE0)|(1<<TXEN0); // Enable TX and TX IRQ.
-  UCSR0B|=(1<<RXCIE0)|(1<<RXEN0); // Enable RX and RX IRQ 
-  UCSR0C=(3<<UCSZ00); // Asynchronous UART, 8-N-1
-}// end UART init
-
-void config_ISR()
+void config_ISR_US()
 {
   EICRA = ((1<<ISC00));  //Any logical change on INT0 generates interrupt INT0
   EIMSK = (1<<INT0);  //Enable external pin interrupt
   sei(); //Set global interrupts
 }
 
-void timer1_1Hz_init(uint8_t en_IRQ) { //en_IRQ eanbles 
+void timer1_1Hz_init_US(uint8_t en_IRQ) { //en_IRQ eanbles 
 //set timer1 interrupt at 1Hz
   TCCR1A = 0;// set entire TCCR1A register to 0
   TCCR1B = 0;// same for TCCR1B
@@ -61,11 +45,11 @@ void timer1_1Hz_init(uint8_t en_IRQ) { //en_IRQ eanbles
   TIMSK1 |= (1 << OCIE1A);
 }
 
-void timer2_PWM_init(){
-  DDRB = (1<<LED_PIN); // PB3 = Pin #11 set as output for PWM
-  TCCR2A = _BV(COM2A1) | _BV(COM2B1) | _BV(WGM21) | _BV(WGM20);
-  TCCR2B = _BV(CS22); 
-}
+// void timer2_PWM_init(){
+//   DDRB = (1<<LED_PIN); // PB3 = Pin #11 set as output for PWM
+//   TCCR2A = _BV(COM2A1) | _BV(COM2B1) | _BV(WGM21) | _BV(WGM20);
+//   TCCR2B = _BV(CS22); 
+// }
 
 ISR(TIMER1_COMPA_vect){//timer1 interrupt 1Hz toggles pin 13 (LED)
   counter++;
@@ -129,6 +113,6 @@ void writeUSToLED(int us_dist)
 
 void print_us_distance()
 {
-  Serial.print("ir_distance = ");
+  Serial.print("us_distance = ");
   Serial.println(PULSE_data.pulse0);
 }
