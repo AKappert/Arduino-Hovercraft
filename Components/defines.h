@@ -4,6 +4,8 @@
 #include "stdlib.h"
 #include "avr/io.h"
 #include <Wire.h>
+#include "us_measurement.h"
+#include "us_manager.h"
 
 // PIN DEFINITIONS
 // LED PINS
@@ -31,6 +33,7 @@
 
 #define MIN_RANGE 15
 #define MAX_RANGE 40
+
 
 
 

@@ -4,20 +4,23 @@
 //  ======================================== VARIABLES ========================================
   
   
-  // Enums
-  enum MACHINE_STATE {SHUTDOWN, CALCULATING, MOVING, PAUSING};
-  enum LED_TYPE {PWM, DISCRETE};
-  enum SERVO_STATE {STATIC, MOVING_CW, MOVING_CCW};
+// Enums
+enum MACHINE_STATE {SHUTDOWN, CALCULATING, MOVING, PAUSING};
+enum LED_TYPE {PWM, DISCRETE};
+enum SERVO_STATE {STATIC, MOVING_CW, MOVING_CCW};
+
+// Measurement manager object
+US_Manager usManager();
 
 // Flags structure
-  volatile struct {
+volatile struct {
   uint8_t TX_finished:1;
   uint8_t sample:1;
   uint8_t mode:1;
   uint8_t stop:1;
   uint8_t T1_ovf0:2;
   uint8_t T1_ovf1:2;
-  } flags;
+} flags;
 
 // Pulse data structure
 static volatile struct {
@@ -37,6 +40,10 @@ static volatile struct {
 void setServoAngle(int deg) {
 
 }
+
+
+
+
 
 // Function used to initialize
 void gpio_init() {
