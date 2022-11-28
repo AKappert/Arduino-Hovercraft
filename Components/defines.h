@@ -4,7 +4,7 @@
 #include "stdlib.h"
 #include "avr/io.h"
 #include <Wire.h>
-#include "us_measurement.h"
+//#include "us_measurement.h"
 #include "us_manager.h"
 
 // PIN DEFINITIONS
@@ -12,12 +12,7 @@
 #define LED_PIN PB3 
 #define NANO_LED_PIN PB5
 
-// SERVO PINS
-#define SERVO_PIN PB1
 
-// ULTRASONIC SENSOR PINS
-#define ECHO_PIN PD2
-#define TRIG_PIN PB5
 
 // INFRARED SENSOR PINS
 #define cbi(sfr, bit) (_SFR_BYTE(sfr) &= ~_BV(bit))

@@ -7,10 +7,10 @@
 // Enums
 enum MACHINE_STATE {SHUTDOWN, CALCULATING, MOVING, PAUSING};
 enum LED_TYPE {PWM, DISCRETE};
-enum SERVO_STATE {STATIC, MOVING_CW, MOVING_CCW};
+
 
 // Measurement manager object
-US_Manager usManager();
+US_Manager usManager;
 
 // Flags structure
 volatile struct {
@@ -35,13 +35,6 @@ static volatile struct {
 
 
 //  ======================================== FUNCTIONS ========================================
-
-// Function used to set servo to a int value from 0-180
-void setServoAngle(int deg) {
-
-}
-
-
 
 
 
@@ -68,6 +61,8 @@ void setup() {
 //  (  9 ) 
 //  ( 10 ) 
 //  ( 11 ) 
+  
+  
 }
 
 
@@ -84,5 +79,8 @@ void loop() {
 //  (  9 ) 
 //  ( 10 ) 
 //  ( 11 ) 
+
+  usManager.move_servo(180);
+
 
 }

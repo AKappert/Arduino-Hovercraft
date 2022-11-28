@@ -3,18 +3,29 @@
 //                                          - collecting distance values from the US-sensor
 //                                          - ...
 
-#include "us_measurement.h"
 
+#include "us_measurement.h"
+#include <Servo.h>
 
 // Servo steps and range
 #define SERVO_STEP_SIZE 5
 #define SERVO_DEGREE_RANGE 180
 
+// Servo pins
+#define SERVO_PIN PB1
+
+// Ultrasonic sensor pins
+#define ECHO_PIN PD2
+#define TRIG_PIN PB5
+
+
 //ENUM to track which way direction the servo is turning
-enum SERVO_STATE {STOPPED, CCW, CW};
+enum SERVO_STATE {STATIC, MOVING_CW, MOVING_CCW};
 
 class  US_Manager {
     private:
+    // Servo object
+    Servo frontServo;
 
     // Array of measurements obtained from the US_sensor
     US_Measurement us_measurements[ int(SERVO_DEGREE_RANGE / SERVO_STEP_SIZE) ];
@@ -46,6 +57,8 @@ class  US_Manager {
     US_Measurement get_measurement_from_index(int index);
 
     // Destructor
-    ~US_Manager ();
+    ~ US_Manager ();
 
  };
+
+

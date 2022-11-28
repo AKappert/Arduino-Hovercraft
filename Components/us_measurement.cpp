@@ -8,7 +8,7 @@
     }
 
     // Constructor with initialization
-    US_Measurement::US_Measurement(int servo_angle, float distance_measured){
+    US_Measurement::US_Measurement(int servo_angle, unsigned long distance_measured){
         this->servo_angle = servo_angle;
         this->distance_measured = distance_measured;
     }
@@ -19,7 +19,7 @@
     }
 
     // Setter for distance
-    void US_Measurement::set_distance_measured(float distance_measured){
+    void US_Measurement::set_distance_measured(unsigned long distance_measured){
         this->distance_measured = distance_measured;
     }
 
