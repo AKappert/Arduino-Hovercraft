@@ -3,6 +3,7 @@ void pins_init()
 {
   //DDRC = (1<<DATA_PIN);   //Sets only A0 as INPUT
   DDRB = ((1<<LED_PIN) | (1<<TRIG_PIN) | (1 << NANO_LED_PIN)); // LED_PIN and TRIG_PIN as output
+  DDRB |= (1 << SERVO_PIN);
   DDRD = (0<<ECHO_PIN); //ECHO_PIN as input
   TCCR2A = _BV(COM2A1) | _BV(COM2B1) | _BV(WGM21) | _BV(WGM20);
   TCCR2B = _BV(CS22);
