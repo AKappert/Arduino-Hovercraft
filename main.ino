@@ -18,7 +18,6 @@
 #define LIFT_FAN_MAX_SPEED 240
 #define LIFT_FAN_MIN_SPEED 210
 
-
 // --------------SERVO_STUFF--------------
 #define SERVO_STEP_SIZE 5
 #define SERVO_DEGREE_RANGE 180
@@ -26,16 +25,13 @@ Servo myservo;
 
 // --------------US_STUFF--------------
 #define NUM_SCANS_PER_STEP 10
-
-//#include "scanner.h"
 //  ======================================== VARIABLES ========================================
-   
-  // Enums
-  enum MACHINE_STATE {SHUTDOWN, CALCULATING, SCANNING, MOVING, PAUSING, STARTING, CHECKING};
-  //enum LED_TYPE {PWM, DISCRETE};
-  //enum SERVO_STATE {STATIC, MOVING_CW, MOVING_CCW};
-//  ======================================== FUNCTIONS ========================================
-
+  
+  
+// Enums
+enum MACHINE_STATE {SHUTDOWN, CALCULATING, MOVING, PAUSING};
+enum LED_TYPE {PWM, DISCRETE};
+enum SERVO_STATE {STATIC, MOVING_CW, MOVING_CCW};
 
 //  (  1 ) Divide servo's 180deg range of motion into 180 / SERVO_STEP
 //  (  2 ) Create array or datatype (ie an object class) to store each angle.
