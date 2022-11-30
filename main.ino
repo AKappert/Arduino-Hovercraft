@@ -157,6 +157,8 @@ void turnServo(int deg)
   delay(200);
   analogWrite(LIFT_FAN, LIFT_FAN_MAX_SPEED);
   analogWrite(THRUST_FAN, THRUST_FAN_MAX_SPEED);
+  myservo.write(deg);
+
   if(deg > 80 && deg < 100)
   {
     delay(300); // these delays essentially stack depending on how fat the degree is
@@ -173,7 +175,9 @@ void turnServo(int deg)
   {
     delay(300);
   }
-  delay(1000);
+  if(us_measurements[arraySize/2].distance < 5)
+    delay(500);  
+  delay(1050);
   analogWrite(THRUST_FAN, LIFT_FAN_MIN_SPEED);
   myservo.write(SERVO_STRAIGHT);
   analogWrite(THRUST_FAN, THRUST_FAN_MAX_SPEED);
@@ -263,7 +267,7 @@ void loop() {;
   Serial.print(distance);
   Serial.println(" cm");
 
-  if(distance < 20)
+  if(distance < 10)
     status = SCANNING;
   else
   {
