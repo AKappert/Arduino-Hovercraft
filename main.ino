@@ -36,7 +36,7 @@ Servo myservo;
   
 // Enums
 enum MACHINE_STATE {SHUTDOWN, SCANNING, STARTING, CALCULATING, MOVING, PAUSING};
-enum TURN_RADIUS{PETITE, SMALL, MEDIUM, LARGE, HUGE}
+enum TURN_RADIUS{PETITE, SMALL, MEDIUM, LARGE, HUGE};
 enum LED_TYPE {PWM, DISCRETE};
 enum SERVO_STATE {STATIC, MOVING_CW, MOVING_CCW};
 
@@ -75,6 +75,7 @@ struct US_measurement{
 
 const int arraySize = (SERVO_DEGREE_RANGE/SERVO_STEP_SIZE) + 1;
 struct US_measurement us_measurements[arraySize];
+double scanFixer;
 
 long scan_duration;
 long scan_distance[NUM_SCANS_PER_STEP];
@@ -118,7 +119,7 @@ void scan_and_measure(){
     long avg_distance = return_avg_distance();
     // Storing the distance with the degree
 
-    if(avg_distance > 110)
+    if(avg_distance > 250)      //go back to 110 if everything breaks
       us_measurements[index].distance = 0;
     else
       us_measurements[index].distance = avg_distance;
@@ -156,24 +157,23 @@ void turnServo(int deg)
   delay(200);
   analogWrite(LIFT_FAN, LIFT_FAN_MAX_SPEED);
   analogWrite(THRUST_FAN, THRUST_FAN_MAX_SPEED);
-  if(deg > 80 || < 100)
+  if(deg > 80 && deg < 100)
   {
     delay(300); // these delays essentially stack depending on how fat the degree is
   }
-  else if(deg > 60 || < 120)
+  if(deg > 60 && deg < 120)
   {
     delay(300);
   }
-  else if(deg > 40 || < 140)
+  if(deg > 40 && deg < 140)
   {
     delay(300);
   }
-  else if(deg > 20 || < 160)
+  if(deg > 20 && deg < 160)
   {
     delay(300);
   }
-  else
-    delay(1000);
+  delay(1000);
   analogWrite(THRUST_FAN, LIFT_FAN_MIN_SPEED);
   myservo.write(SERVO_STRAIGHT);
   analogWrite(THRUST_FAN, THRUST_FAN_MAX_SPEED);
@@ -244,10 +244,9 @@ void loop() {;
     }
     Serial.println(max);
     Serial.println(deg);
-    myservo.write(deg);
+    //myservo.write(deg);
+    turnServo(deg);
 
-    ///PUT THIS IN move(enum MOVE) that takes SMALL, MID, LARGE turn amounts 
-    ///
   } 
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
@@ -264,10 +263,15 @@ void loop() {;
   Serial.print(distance);
   Serial.println(" cm");
 
-  if(distance < 30)
+  if(distance < 20)
     status = SCANNING;
   else
+  {
     status = MOVING;
+    scanFixer++;
+  }
+  if(((int)scanFixer % 300) == 0)
+    status = SCANNING;
 }
 
 
