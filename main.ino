@@ -14,9 +14,9 @@
 #define SERVO_INITIAL 86
 #define SERVO_STRAIGHT 88
 
-#define THRUST_FAN_MAX_SPEED 230
+#define THRUST_FAN_MAX_SPEED 240
 #define LIFT_FAN_MAX_SPEED 240
-#define LIFT_FAN_MIN_SPEED 230
+#define LIFT_FAN_MIN_SPEED 210
 
 // --------------SERVO_STUFF--------------
 #define SERVO_STEP_SIZE 5
@@ -134,23 +134,6 @@ void scan_and_measure(){
     }
 }
 
-US_measurement findMax(US_measurement arr[], int size){
-    int max = arr[0].distance;
-    int deg = arr[0].degree;    
-    //Loop through the array    
-    for (int i = 0; i < size; i++) {     
-        //Compare elements of array with max    
-       if(arr[i].distance > max)
-       {
-           max = arr[i].distance;
-           deg = arr[i].degree;    
-       }    
-    }
-    US_measurement temp;
-    temp.degree = deg;
-    temp.distance = max;
-    return temp;
-}     
 
 void turnServo(int deg)
 {
@@ -161,23 +144,23 @@ void turnServo(int deg)
 
   if(deg > 80 && deg < 100)
   {
-    delay(300); // these delays essentially stack depending on how fat the degree is
+    delay(400); // these delays essentially stack depending on how fat the degree is
   }
   if(deg > 60 && deg < 120)
   {
-    delay(300);
+    delay(400);
   }
   if(deg > 40 && deg < 140)
   {
-    delay(300);
+    delay(400);
   }
   if(deg > 20 && deg < 160)
   {
-    delay(300);
+    delay(400);
   }
   if(us_measurements[arraySize/2].distance < 5)
     delay(500);  
-  delay(1050);
+  delay(1100);
   analogWrite(THRUST_FAN, LIFT_FAN_MIN_SPEED);
   myservo.write(SERVO_STRAIGHT);
   analogWrite(THRUST_FAN, THRUST_FAN_MAX_SPEED);
@@ -208,18 +191,7 @@ void setup() {
 }
 
 
-//  ======================================== MAIN ========================================
-//  (  1 ) Check if IS_RUNNING = true.
-//  (  2 ) For each step in servo's range of motion, measure distance
-//  (  3 ) Store distance and servo angle into array/datatype
-//  (  4 ) Start a loop that cycles through each value in the array/datatype
-//  (  5 ) Average values next to each other in sizes of SERVO_CLUSTER_SIZE
-//  (  6 ) Calculate what moves need to be done to move the hover craft
-//  (  7 ) 
-//  (  8 ) 
-//  (  9 ) 
-//  ( 10 ) 
-//  ( 11 ) 
+int prevDegs[3] = {0,0,0};
 void loop() {;
   if(status == MOVING)
   {
@@ -243,14 +215,20 @@ void loop() {;
        if(us_measurements[i].distance > max)
        {
            max = us_measurements[i].distance;
-           deg = us_measurements[i].degree;    
+           deg = us_measurements[i].degree;
+           prevDegs[2] = prevDegs[1];
+           prevDegs[1] = prevDegs[0];
+           prevDegs[0] = deg;
        }    
     }
     Serial.println(max);
     Serial.println(deg);
-    //myservo.write(deg);
+    
     turnServo(deg);
-
+    if (prevDegs[0] == prevDegs[1] == prevDegs[2]){
+      if (deg >= 90) turnServo(175);
+      else turnServo(5);
+    }
   } 
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
